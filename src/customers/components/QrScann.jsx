@@ -6,7 +6,7 @@ import QrFrame from "../../assets/qr-frame.svg";
 import swal from "sweetalert";
 
 import Web3 from "web3"
-import qrCodeContract from "../../abi/QrCode.json"
+import qrCodeContract from "../../abis/QrCode.json"
 
 const networkId = "http://127.0.0.1:7545"
 
@@ -31,8 +31,8 @@ const QrScann = () => {
     // setScannedResult(result?.data);
     getScannItemResult(result?.data);
 
-    
-     
+
+
   };
 
   // Fail
@@ -82,16 +82,16 @@ const QrScann = () => {
       );
   }, [qrOn]);
 
-  
+
 
 
   useEffect(() => {
 
     const init = async () => {
       if (window.ethereum) {
-        try{
+        try {
           // Request MetaMask account access
-         
+
           await window.ethereum.request({ method: 'eth_requestAccounts' });
 
           // Create a new web3 instance
@@ -99,15 +99,15 @@ const QrScann = () => {
           // setWeb3(web3Instance);
 
         }
-        catch(error){
+        catch (error) {
           console.error(`User denied account access `);
         }
-      }else {
-          console.error('Please install MetaMask');
-      }  
+      } else {
+        console.error('Please install MetaMask');
+      }
     };
-    init(); 
-  },[]);
+    init();
+  }, []);
 
   const getScannItemResult = async (qrHash) => {
     const web3 = new Web3(networkId)
@@ -123,7 +123,7 @@ const QrScann = () => {
 
     console.log("Is original product? ", _isOriginal)
 
-    if(_isOriginal){
+    if (_isOriginal) {
 
       setIsOriginal(true)
 
@@ -144,7 +144,7 @@ const QrScann = () => {
 
     console.log(_isOriginal)
 
-}
+  }
 
   // useEffect(() => {
   //   if (!qrOn) {
@@ -170,23 +170,23 @@ const QrScann = () => {
             Scanned Result: {scannedResult}
           </p>
       )} */}
-    <div className="relative w-full md:max-w-2xl">
-      <video
-        ref={videoEl}
-        className="w-full h-[50%] bg-black rounded-lg "
-      ></video>
-      <div ref={qrBoxEl} className="flex items-center justify-center">
-        <img
-              src={QrFrame}
-              alt="Qr Frame"
-              width={456}
-              height={456}
-              className="h-auto absolute flex z-50 items-center justify-center"
-            />
+      <div className="relative w-full md:max-w-2xl">
+        <video
+          ref={videoEl}
+          className="w-full h-[50%] bg-black rounded-lg "
+        ></video>
+        <div ref={qrBoxEl} className="flex items-center justify-center">
+          <img
+            src={QrFrame}
+            alt="Qr Frame"
+            width={456}
+            height={456}
+            className="h-auto absolute flex z-50 items-center justify-center"
+          />
+        </div>
+
       </div>
-      
-    </div>
-      
+
     </div>
   );
 };

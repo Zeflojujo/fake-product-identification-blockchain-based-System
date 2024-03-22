@@ -11,7 +11,7 @@ const SPARK_RPC_URL = process.env.SPARK_RPC_URL
 const FUSE_RPC_URL = process.env.FUSE_RPC_URL
 
 module.exports = {
-    contracts_build_directory: "./src/abi",
+    contracts_build_directory: "./src/abis",
 
     networks: {
         development: {

@@ -11,12 +11,14 @@ import AddRetailers from "./manufacturers/pages/RegisterRetailer"
 import CustomerHome from "./customers/pages/Home"
 import Dashboard from "./manufacturers/pages/Dashboard"
 import AddProduct from "./manufacturers/pages/AddProduct"
+import Home from "./+homedirectory/pages/home"
 
 const App = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Dashboard />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/fake-product" element={<ViewFakeProduct />} />
                 <Route path="/qrcodes" element={<ViewQrCodes />} />
                 <Route path="/generate-qrcode" element={<GenerateQrCode />} />
@@ -24,10 +26,10 @@ const App = () => {
                 <Route path="/add-retailer" element={<AddRetailers />} />
                 <Route path="/add-product" element={<AddProduct />} />
 
-                <Route path="/login" element={<LoginManufacturer />} />
-                <Route path="/register" element={<RegisterManufacturer />} />
+                <Route path="/manufacturer/login" element={<LoginManufacturer />} />
+                <Route path="/manufacturer/register" element={<RegisterManufacturer />} />
 
-                {/* costumer */}
+                {/* customer */}
                 <Route path="/customer" element={<CustomerHome />} />
                 <Route path="/customer/scann" element={<ScannQrCode />} />
             </Routes>

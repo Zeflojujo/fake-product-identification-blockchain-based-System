@@ -6,7 +6,7 @@ import * as Yup from "yup"
 import { Link } from "react-router-dom"
 import { IoMdArrowRoundBack } from "react-icons/io"
 import swal from "sweetalert"
-import retailerContract from "../../abi/QrCode.json"
+import retailerContract from "../../abis/QrCode.json"
 import Web3 from "web3"
 
 const Modal = () => {

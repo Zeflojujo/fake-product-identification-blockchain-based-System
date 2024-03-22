@@ -6,7 +6,7 @@ import * as Yup from "yup"
 import { Link } from "react-router-dom"
 import { FaRegEye } from "react-icons/fa";
 import swal from "sweetalert"
-import qrCodeContract from "../../abi/QrCode.json"
+import qrCodeContract from "../../abis/QrCode.json"
 import Web3 from "web3"
 
 const AddProduct = () => {
@@ -111,8 +111,8 @@ const AddProduct = () => {
         setqrCodeHash(values.qrCodeHash)
 
         // if (!description === "" && !productCode === "" && !qrCodeHash === "") {
-            handleAddProduct()
-            setSubmitting(false)
+        handleAddProduct()
+        setSubmitting(false)
 
         // }
     }
@@ -201,7 +201,7 @@ const AddProduct = () => {
                                             />
                                         </div>
 
-                                        
+
                                         <div className="mb-4">
                                             <label
                                                 htmlFor="qrCodeHash"

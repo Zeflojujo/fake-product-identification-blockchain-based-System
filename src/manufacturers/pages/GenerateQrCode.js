@@ -5,7 +5,7 @@ import Generate from "../components/Generate"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import * as Yup from "yup"
 import Web3 from "web3"
-import qrCodeContract from "../../abi/QrCode.json"
+import qrCodeContract from "../../abis/QrCode.json"
 import CryptoJS from "crypto-js"
 import swal from "sweetalert"
 
