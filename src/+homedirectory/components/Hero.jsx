@@ -17,11 +17,11 @@ const Hero = () => {
             <div className="md:w-3/6 w-full">
                 <div>
                     <h1 className="text-white text-5xl font-bold">
-                        Damu Salama <br /> Blood Donation, <br />
-                        <span className="text-gradient">BDBS</span> System
+                        Alcoshield <br /> Fake Product Identification, <br />
+                        <span className="text-gradient">FPIBS</span> System
                     </h1>
                     <p className="text-gray-500 font-semibold text-sm mt-3">
-                        Your blood can help people to live.
+                        Protect your product from fake product and educate people to use this system to identify fake product.
                     </p>
                 </div>
 
@@ -33,22 +33,22 @@ const Hero = () => {
             rounded-full cursor-pointer py-2 px-4"
                         onClick={onCreatedNFT}
                     >
-                        Donate Now
+                        Scann Now
                     </Link>
                 </div>
 
                 <div className="w-3/4 flex justify-between items-center mt-5">
                     <div>
                         <p className="text-white font-bold">1231k</p>
-                        <small className="text-gray-300">Donor</small>
+                        <small className="text-gray-300">Fake</small>
                     </div>
                     <div>
                         <p className="text-white font-bold">152k</p>
-                        <small className="text-gray-300">Recipient</small>
+                        <small className="text-gray-300">Report</small>
                     </div>
                     <div>
                         <p className="text-white font-bold">200k</p>
-                        <small className="text-gray-300">Doctors</small>
+                        <small className="text-gray-300">Real</small>
                     </div>
                 </div>
             </div>

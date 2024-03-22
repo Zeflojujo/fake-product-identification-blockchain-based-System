@@ -31,11 +31,11 @@ contract QrCode {
     }
 
     struct Retailer {
-        uint256 retailerID;
+        address publicAddress;
         string name;
         string location;
         string email;
-        string phoneNumber;
+        string password;
     }
 
     struct ItemDetails {
@@ -58,9 +58,9 @@ contract QrCode {
     mapping(address => SystemOwner) private sysOwnerMap;
 
     mapping(address => Manufacturer) public manufacturerDetails;
-    mapping(address => mapping(uint => Retailer))
+    mapping(address => mapping(address => Retailer))
         public manufacturerToRetailerDetails;
-    mapping(string => Retailer) public retailerDetails;
+    mapping(address => Retailer) public retailerDetails;
 
     //STORING
     mapping(address => mapping(uint256 => string))
@@ -191,29 +191,29 @@ contract QrCode {
         );
     }
 
-    function addRetailerInfo(
+    function addRetailer(
+        address _publicAddress,
         string memory _name,
         string memory _location,
         string memory _email,
-        string memory _phoneNumber
+        string memory _password
     ) external onlyManufacturer {
-        require(bytes(_name).length > 0, "Manufacturer name cannot be empty");
+        require(bytes(_publicAddress).length > 0, "Retailer publicAddress cannot be empty");
+        require(bytes(_name).length > 0, "Retailer name cannot be empty");
         require(bytes(_location).length > 0, "Location name cannot be empty");
         require(bytes(_email).length > 0, "Email address cannot be empty");
-        require(bytes(_phoneNumber).length > 0, "Phone number cannot be empty");
+        require(bytes(_password).length > 0, "Phone number cannot be empty");
 
         emit RetailerAdded(_name);
-        s_retailerID++;
-        manufacturerToRetailerDetails[msg.sender][s_retailerID] = Retailer(
-            s_retailerID,
+        Retailer storage retailer = Retailer(
+            _publicAddress,
             _name,
             _location,
             _email,
-            _phoneNumber
+            _password
         );
-        retailerDetails[_name] = manufacturerToRetailerDetails[msg.sender][
-            s_retailerID
-        ];
+        manufacturerToRetailerDetails[msg.sender][_publicAddress] = retailer;
+        retailerDetails[_publicAddress] = retailer;
     }
 
     function removeRetailer(uint256 _retailerID) external onlyManufacturer {

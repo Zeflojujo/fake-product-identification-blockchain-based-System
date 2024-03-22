@@ -1,175 +1,129 @@
-// import React, { useState } from 'react';
-// import { useTable, useFilters, useGlobalFilter, useSortBy } from 'react-table';
-// import Modal from '../components/RetailerModal';
+import React, { useState, useEffect } from 'react';
+// import swal from 'sweetalert';
+import { useGlobalState } from '../../store'
+import swal from 'sweetalert';
+// import { deleteDonor } from '../../BlockchainService';
+import { MdDelete } from 'react-icons/md';
 
-// const RetailerTable = ({ data }) => {
-//   const [isModalOpen, setModalOpen] = useState(false);
 
-//   const handleFormSubmit = (formData) => {
-//     // Handle the form submission logic here
-//     console.log('Form submitted with data:', formData);
-//     // Close the modal after submission
-//     setModalOpen(false);
-//   };
+const RetailerTable = () => {
+  const [donors] = useGlobalState("donors");
+  const [hoveredRow, setHoveredRow] = useState(null);
+  const [allDonors, setAllDonors] = useState([])
+  const [end, setEnd] = useState(6)
 
-//   const columns = React.useMemo(
-//     () => [
-//       { Header: 'ID', accessor: 'id' },
-//       { Header: 'Name', accessor: 'name' },
-//       { Header: 'Location', accessor: 'location' },
-//       { Header: 'Phone Number', accessor: 'phoneNumber' },
-//       { Header: 'Email', accessor: 'email' },
-//       { Header: 'Status', accessor: 'status' },
-//     ],
-//     []
-//   );
 
-//   const {
-//     getTableProps,
-//     getTableBodyProps,
-//     headerGroups,
-//     rows,
-//     prepareRow,
-//     state,
-//     setGlobalFilter,
-//   } = useTable(
-//     {
-//       columns,
-//       data,
-//     },
-//     useFilters,
-//     useGlobalFilter,
-//     useSortBy
-//   );
-
-//   const { globalFilter } = state;
-
-//   return (
-//     <div>
-
-//       <input
-//         type="text"
-//         value={globalFilter || ''}
-//         onChange={(e) => setGlobalFilter(e.target.value)}
-//         placeholder="Search..."
-//       />
-//       <div>
-//         <button
-//           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full absolute top-4 right-4"
-//           onClick={() => setModalOpen(true)}
-//         >
-//           Add Data
-//         </button>
-//         <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onFormSubmit={handleFormSubmit} />
-//         {/* {/* Rest of your content */}
-//       </div>
-
-//       <table {...getTableProps()} style={{ width: '100%', borderCollapse: 'collapse' }}>
-//         <thead>
-//           {headerGroups.map((headerGroup) => (
-//             <tr {...headerGroup.getHeaderGroupProps()}>
-//               {headerGroup.headers.map((column) => (
-//                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-//                   {column.render('Header')}
-//                   <span>
-//                     {column.isSorted ? (column.isSortedDesc ? ' Descending' : ' Ascending') : ''}
-//                   </span>
-//                   <div>{column.canFilter ? column.render('Filter') : null}</div>
-//                 </th>
-//               ))}
-//             </tr>
-//           ))}
-//         </thead>
-//         <tbody {...getTableBodyProps()}>
-//           {rows.map((row) => {
-//             prepareRow(row);
-//             return (
-//               <tr {...row.getRowProps()}>
-//                 {row.cells.map((cell) => (
-//                   <td {...cell.getCellProps()} style={{ padding: '10px', border: 'solid 1px gray' }}>
-//                     {cell.render('Cell')}
-//                   </td>
-//                 ))}
-//               </tr>
-//             );
-//           })}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// };
-
-// export default RetailerTable;
-
-import React from "react";
-import DataTable from "react-data-table-component";
-import { FaDownload, FaEdit, FaTrash } from "react-icons/fa";
-
-const RetailerTable = ({ data }) => {
-  const columns = [
-    { name: "ID", selector: (row) => row.id, sortable: true },
-    { name: "Name", selector: (row) => row.name, sortable: true },
-    { name: "Location", selector: (row) => row.location, sortable: true },
-    {
-      name: "Phone Number",
-      selector: (row) => row.phoneNumber,
-      sortable: true,
-    },
-    {
-      name: "Actions",
-      cell: (row) => (
-        <div className="flex items-center space-x-2">
-          <button
-            className="text-red-500 hover:text-red-700"
-            onClick={() => handleDelete(row)}
-          >
-            <FaTrash />
-          </button>
-          <button
-            className="text-blue-500 hover:text-blue-700"
-            onClick={() => handleUpdate(row)}
-          >
-            <FaEdit />
-          </button>
-          <button
-            className="text-green-500 hover:text-green-700"
-            onClick={() => handleDownload(row)}
-          >
-            <FaDownload />
-          </button>
-        </div>
-      ),
-    },
-  ];
-
-  const handleDelete = (row) => {
-    // Handle delete logic
-    console.log("Delete", row);
+  const handleMouseEnter = (rowIndex) => {
+    setHoveredRow(rowIndex);
   };
 
-  const handleUpdate = (row) => {
-    // Handle update logic
-    console.log("Update", row);
+  const handleMouseLeave = () => {
+    setHoveredRow(null);
   };
 
-  const handleDownload = (row) => {
-    // Handle download logic
-    console.log("Download", row);
-  };
+  const getDonors = () => {
+    return donors.slice(0, end)
+  }
+
+  useEffect(() => {
+    setAllDonors(getDonors())
+    console.log(donors)
+  }, [donors, end])
+
+  // const deleteRegisterHandler = async (publicAddress) => {
+  //   console.log("donor deleted public address is: ", publicAddress)
+
+  //   swal({
+  //     title: "Are you sure?",
+  //     text: "Once deleted, you will not be able to recover this imaginary file!",
+  //     icon: "warning",
+  //     buttons: true,
+  //     dangerMode: true,
+  //   })
+  //     .then(async (willDelete) => {
+  //       if (willDelete) {
+  //         swal("Poof! Your imaginary file has been deleted!", {
+  //           icon: "success",
+  //         });
+  //         const result = await deleteDonor({ publicAddress })
+
+  //         if (result) {
+  //           window.location.reload()
+  //         } else {
+  //           throw Error
+  //         }
+  //         console.log("donor deleted public address is: ", publicAddress)
+  //       } else {
+  //         swal("Your imaginary file is safe!", {
+  //           icon: 'info'
+  //         });
+  //       }
+  //     });
+
+  // }
 
   return (
     <>
-      <div className="w-4/5 flex justify-center flex-col dark:border dark:border-blue-500 dark:shadow-md dark:rounded-md dark:shadow-gray-400">
-        <DataTable
-          title="Retailers List"
-          columns={columns}
-          data={data}
-          pagination
-          selectableRows
-          className="dark:bg-gray-900"
-        />
+
+      <div className="mb-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2 dark:text-gray-400">List of Retailers</h1>
       </div>
+
+      <div className="p-4">
+
+
+
+        {/* <CreateNewsModal showModal={isModalOpen} closeModal={closeModal} /> */}
+
+
+        <div className="shadow-md overflow-x-auto" style={{ zIndex: '-999' }}>
+          <table className="min-w-full overflow-x-auto  bg-white border-b border-gray-700 dark:bg-[#212936] dark:text-gray-300 dark:border-gray-700">
+            <thead className='bg-gray-50 border-b-2 border-gray-200 dark:bg-gray-900 dark:gray-300'>
+              <tr className='border-none'>
+                <th className="py-2 px-4 border-b text-center text-lg">S/N</th>
+                <th className="py-2 px-4 border-b text-center text-lg uppercase">Public Address</th>
+                <th className="py-2 px-4 border-b text-center text-lg uppercase">Name</th>
+                <th className="py-2 px-4 border-b text-center text-lg uppercase">Location</th>
+                <th className="py-2 px-4 border-b text-center text-lg uppercase">Email</th>
+
+                <th className="py-2 px-4 border-b text-center text-lg flex col-span-2 justify-center uppercase">Actions</th>
+                <th className="py-2 px-4 border-b text-center"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {allDonors.length === 0 ? (
+                <tr>
+                  <td colSpan={9} className="flex justify-center col-span-8 items-center mx-auto py-4 px-4 text-gray-700 text-base border-b dark:text-gray-500">
+                    No Record Found
+                  </td>
+                </tr>
+              ) : (
+
+                allDonors.map((donor, index) => (
+                  <tr
+                    key={index}
+                    onMouseEnter={() => handleMouseEnter(index)}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    <td className={`py-2 px-4 text-gray-700 text-base text-center border-b dark:text-gray-500 ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}>{index + 1}</td>
+                    <td className={`py-2 px-4 text-gray-700 text-base text-center border-b dark:text-gray-500 ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}>{donor.publicAddress}</td>
+                    <td className={`py-2 px-4 text-gray-700 text-base text-center border-b dark:text-gray-500 ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}>{donor.name}</td>
+                    <td className={`py-2 px-4 text-gray-700 text-base text-center border-b dark:text-gray-500 ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}>{donor.age.toString()}</td>
+                    <td className={`py-2 px-4 text-gray-700 text-base text-center border-b dark:text-gray-500 ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}>{donor.weight.toString()}</td>
+
+                    <td className={`w-20 py-2 px-4 text-gray-700 text-base border-b ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}><button className='border border-solid bg-red-400 hover:bg-red-500 active:bg-red-400 px-3 py-1 border-r-2 text-white dark:bg-transparent dark:text-gray-500 gap-1 flex items-center dark:border-red-500'><MdDelete size={17} />Delete</button></td>
+                    {/* <td className={`w-20 py-2 px-4 text-gray-700 text-base border-b ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}><button onClick={() => deleteNewsHandler(item.id)} className='border border-solid bg-red-400 hover:bg-red-500 active:bg-red-400 px-3 py-1 border-r-2 text-white dark:bg-transparent dark:text-gray-500 dark:border-red-500'>Delete</button></td> */}
+                    {/* <td className={`w-20 py-2 px-4 text-gray-700 text-base border-b ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}><button onClick={() => UpdataNewsHandler(item.id)} className='border border-solid bg-cyan-400 hover:bg-cyan-600 active:bg-cyan-400 px-3 py-1 border-r-2 text-white dark:bg-transparent dark:text-gray-500 dark:border-cyan-400'>Update</button></td> */}
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </>
+
   );
 };
 

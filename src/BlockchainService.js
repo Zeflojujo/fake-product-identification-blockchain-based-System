@@ -1,6 +1,6 @@
 import Web3 from "web3";
 import { setGlobalState, getGlobalState } from "./store";
-import abi from "./abis/QrCode.json";
+import qrcodeAbi from "./abis/QrCode.json";
 
 const { ethereum } = window;
 window.web3 = new Web3(ethereum);
@@ -9,10 +9,10 @@ window.web3 = new Web3(window.web3.currentProvider);
 const getEtheriumContract = async () => {
   const web3 = window.web3;
   const networkId = await window.web3.eth.net.getId();
-  const networkData = abi.networks[networkId];
+  const networkData = qrcodeAbi.networks[networkId];
 
   if (networkData) {
-    const contract = new web3.eth.Contract(abi.abi, networkData.address);
+    const contract = new web3.eth.Contract(qrcodeAbi.abi, networkData.address);
     return contract;
   } else {
     return null;
@@ -49,6 +49,39 @@ const isWallectConnected = async () => {
       setGlobalState("connectedAccount", "");
       reportError("Please connect wallet.");
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const registerRetailer = async ({
+  publicAddress,
+  name,
+  location,
+  email,
+  password
+}) => {
+  try {
+    const contract = await getEtheriumContract(publicAddress, name, location, email, password);
+    const account = getGlobalState("connectedAccount");
+
+    await contract.methods.addRetailer(publicAddress, name, location, email, password).send({from: account, gas: 100000})
+    return true;
+  } catch (error) {
+      console.log(error.message)
+  }
+}
+
+const systemOwnerLogin = async ({ publicAddress, password }) => {
+  try {
+    const contract = await getEtheriumContract();
+    const account = getGlobalState("connectedAccount");
+
+    await contract.methods
+      .systemOwnerLogin(publicAddress, password)
+      .send({ from: account, gas: 1000000 });
+
+    return true;
   } catch (error) {
     console.log(error);
   }
@@ -105,20 +138,7 @@ const isWallectConnected = async () => {
 //     }
 //   };
 
-  const systemOwnerLogin = async ({ publicAddress, password }) => {
-    try {
-      const contract = await getEtheriumContract();
-      const account = getGlobalState("connectedAccount");
   
-      await contract.methods
-        .systemOwnerLogin(publicAddress, password)
-        .send({ from: account, gas: 1000000 });
-  
-      return true;
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
 //   const medicalCenterLogin = async ({ publicAddress, password }) => {
 //     try {
@@ -223,5 +243,6 @@ const isWallectConnected = async () => {
 export {
     connectWallet,
     isWallectConnected,
-    systemOwnerLogin
+    systemOwnerLogin,
+    registerRetailer
   };

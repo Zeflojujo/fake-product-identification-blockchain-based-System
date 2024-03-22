@@ -44,7 +44,7 @@ const RegisterManufacturer = () => {
     } else {
       setIsDisabled(false)
     }
-    console.log(user)
+    // console.log(user)
   }, [user])
 
   const handleManugacturerLogin = async (e) => {

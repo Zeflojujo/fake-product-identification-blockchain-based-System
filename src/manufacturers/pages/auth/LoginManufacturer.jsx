@@ -7,7 +7,6 @@ import {
   setAlert,
 } from '../../../store'
 import { useState } from 'react'
-import Laboratory from "../../../assets/laboratory.jpg"
 import { systemOwnerLogin } from '../../../BlockchainService'
 import Alert from '../../../+homedirectory/components/Alert';
 import Loading from '../../../+homedirectory/components/Loading';
@@ -37,7 +36,7 @@ const ManufacturerLogin = () => {
     } else {
       setIsDisabled(false)
     }
-    console.log(isDisabled)
+    // console.log(isDisabled)
   }, [user])
 
   const handleManugacturerLogin = async (e) => {
