@@ -17,19 +17,18 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         { title: "Dashboard", link: "/", icon: <MdDashboard /> },
         {
             title: "Generate QrCode",
-            link: "/generate-qrcode",
+            link: "/manufacturer/generate-qrcode",
             icon: <FaChartPie />,
         },
         {
-            title: "ViewQrCode",
-            link: "/qrcodes",
+            title: "QrCodes",
+            link: "/manufacturer/qrcodes",
             icon: <BsQrCode />,
-            dropdown: true,
+            // dropdown: true,
         },
-        { title: "Retailers", link: "/retailers", icon: <FaUser /> },
-        { title: "View Fake Products", link: "/fake-product", icon: <FaKeycdn /> },
-        { title: "Customer", link: "/customer", icon: <FaUser /> },
-        { title: "Add Products", link: "/add-product", icon: <BsDatabaseFillAdd /> },
+        { title: "Retailers", link: "/manufacturer/retailers", icon: <FaUser /> },
+        { title: "View Fake Products", link: "/manufacturer/fake-product", icon: <FaKeycdn /> },
+        { title: "Add Products", link: "/manufacturer/add-product", icon: <BsDatabaseFillAdd /> },
     ]
 
     return (

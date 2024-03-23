@@ -7,7 +7,7 @@ import {
   setAlert,
 } from '../../../store'
 import { useState } from 'react'
-import { systemOwnerLogin } from '../../../BlockchainService'
+import { manufacturerLogin, systemOwnerLogin } from '../../../BlockchainService'
 import Alert from '../../../+homedirectory/components/Alert';
 import Loading from '../../../+homedirectory/components/Loading';
 import { FaArrowRightToBracket } from 'react-icons/fa6';
@@ -48,7 +48,7 @@ const ManufacturerLogin = () => {
       const LoginCredentials = { publicAddress, password }
 
       setLoadingMsg('Intializing transaction...')
-      const result = await systemOwnerLogin(LoginCredentials)
+      const result = await manufacturerLogin(LoginCredentials)
       console.log(result)
 
       if (result) {

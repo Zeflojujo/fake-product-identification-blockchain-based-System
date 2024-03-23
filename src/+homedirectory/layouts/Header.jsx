@@ -2,18 +2,18 @@
 import { Link } from 'react-router-dom'
 import { connectWallet } from '../../BlockchainService'
 import { useGlobalState, truncate } from '../../store'
-import zeflotechLogo from '../../assets/zeflojujoLogo.jpeg'
+import zeflotechLogo from '../../assets/zeflojujoLogo.png'
 
 const Header = () => {
     const [connectedAccount] = useGlobalState('connectedAccount')
     return (
         <nav className="w-4/5 flex md:justify-center justify-between items-center py-4 mx-auto">
             <div className="md:flex-[0.5] flex-initial justify-center items-center">
-                {/* <img
-          className="w-32 cursor-pointer"
-          src={zeflotechLogo}
-          alt="zefloTech Logo"
-        /> */}
+                <img
+                    className="w-24 md:w-32 cursor-pointer"
+                    src={zeflotechLogo}
+                    alt="zefloTech Logo"
+                />
             </div>
 
             <ul
@@ -21,10 +21,10 @@ const Header = () => {
         hidden list-none flex-row justify-center gap-8 
         items-center flex-initial"
             >
-                <li className="mx-4 cursor-pointer"><Link className='text-white font-semibold hover:text-blue-700' to="/collection-point/login">Collection Point</Link></li>
-                <li className="mx-4 cursor-pointer"><Link className='text-white font-semibold hover:text-blue-700' to="/medical-center/login">Medical Center</Link></li>
-                <li className="mx-4 cursor-pointer"><Link className='text-white font-semibold hover:text-blue-700' to="/transporter/login">Transporters</Link></li>
-                <li className="mx-4 cursor-pointer"><Link className='text-white font-semibold hover:text-blue-700' to="/donor/login">Donor</Link></li>
+                <li className="mx-4 cursor-pointer"><Link className='font-semibold hover:text-blue-700 text-blue-600 pb-2 border-b-2 border-blue-600' to="/">Home</Link></li>
+                <li className="mx-4 cursor-pointer"><Link className='text-white font-semibold hover:text-blue-700' to="/manufacturer/login">Manufacturer</Link></li>
+                <li className="mx-4 cursor-pointer"><Link className='text-white font-semibold hover:text-blue-700' to="/retailer/login">Retailer</Link></li>
+                <li className="mx-4 cursor-pointer"><Link className='text-white font-semibold hover:text-blue-700' to="/customer">Customer</Link></li>
             </ul>
 
             {connectedAccount ? (

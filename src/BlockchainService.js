@@ -54,6 +54,47 @@ const isWallectConnected = async () => {
   }
 };
 
+const signUpManufacturer = async ({
+    publicAddress,
+    fullName,
+    email,
+    brand,
+    license,
+    country,
+    region,
+    state,
+    agreement,
+    password
+}) => {
+  try {
+
+    const contract = await getEtheriumContract();
+    const account = getGlobalState("connectedAccount");
+    console.log("connectedAccount: ", account)
+
+    const passwordHash = window.web3.utils.sha3(password);
+    console.log("hashed password: ", passwordHash)
+
+    await contract.methods.signUpManufacturer(
+      publicAddress,
+      fullName,
+      email,
+      brand,
+      license,
+      country,
+      region,
+      state,
+      agreement,
+      passwordHash
+    ).send({from: account, gas: 1000000});
+
+    return true;
+    
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 const registerRetailer = async ({
   publicAddress,
   name,
@@ -62,13 +103,31 @@ const registerRetailer = async ({
   password
 }) => {
   try {
-    const contract = await getEtheriumContract(publicAddress, name, location, email, password);
+    const contract = await getEtheriumContract();
     const account = getGlobalState("connectedAccount");
 
-    await contract.methods.addRetailer(publicAddress, name, location, email, password).send({from: account, gas: 100000})
+    await contract.methods.addRetailer(publicAddress, name, location, email, password).send({from: account, gas: 1000000})
     return true;
   } catch (error) {
       console.log(error.message)
+  }
+}
+const generateQrCode = async ({
+  numberOfQrCode
+}) => {
+  const qrCodeHash = "123456abcd1234";
+  try {
+    const contract = await getEtheriumContract();
+    const account = getGlobalState("connectedAccount");
+
+    for(let i=0; i<numberOfQrCode; i++) {
+      await contract.methods.storeQrHash(qrCodeHash).send({from: account, gas: 1000000})
+    }
+
+    return true;
+    
+  } catch (error) {
+    console.log(error.message)
   }
 }
 
@@ -79,6 +138,23 @@ const systemOwnerLogin = async ({ publicAddress, password }) => {
 
     await contract.methods
       .systemOwnerLogin(publicAddress, password)
+      .send({ from: account, gas: 1000000 });
+
+    return true;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const manufacturerLogin = async ({ publicAddress, password }) => {
+  try {
+    const contract = await getEtheriumContract();
+    const account = getGlobalState("connectedAccount");
+
+    const passwordHash = window.web3.utils.sha3(password);
+
+    await contract.methods
+      .manufacturerLogin(publicAddress, passwordHash)
       .send({ from: account, gas: 1000000 });
 
     return true;
@@ -244,5 +320,8 @@ export {
     connectWallet,
     isWallectConnected,
     systemOwnerLogin,
-    registerRetailer
+    manufacturerLogin,
+    signUpManufacturer,
+    registerRetailer,
+    generateQrCode
   };

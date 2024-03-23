@@ -4,7 +4,7 @@ pragma solidity ^0.8.19;
 contract QrCode {
     event ManufacturerAdded(address indexed manufacturer);
     event RetailerAdded(string retailer);
-    event RetailerRemoved(uint256 indexed retailerID);
+    event RetailerRemoved(address indexed retailerAddress);
 
     event PasswordChanged(address indexed admin);
     event ownershipTransferred(address indexed newAdmin);
@@ -21,13 +21,19 @@ contract QrCode {
     event qrHashDeleted(uint256 _blockId);
 
     struct Manufacturer {
-        address manufacturer;
-        string name;
-        string location;
+        address manPublicAddress;
+        string fullName;
         string email;
-        string phoneNumber;
-        bytes32 password;
+        string brand;
+        string licenseUri;
+        string country;
+        string region;
+        string state;
+        bool agreement;
+        string password;
+        bool isVerified;
         bool isSignedUp;
+        bool isLogin;
     }
 
     struct Retailer {
@@ -46,7 +52,7 @@ contract QrCode {
     //@dev create system account structure
     struct SystemOwner {
         address sysOwner;
-        bytes32 password /*audit*/;
+        bytes32 password; /*audit*/
         bool isLogin;
     }
 
@@ -146,49 +152,59 @@ contract QrCode {
         sysOwnerMap[owner];
     }
 
-    /*@dev Manufacturer functions*/
-    function signUp(
-        string memory _manfName,
-        string memory _location,
+    /**@dev Manufacturer functions*/
+    function signUpManufacturer(
+        address _manPublicAddress,
+        string memory _fullName,
         string memory _email,
-        string memory _phoneNumber,
-        bytes32 _password
+        string memory _brand,
+        string memory _licenseUri,
+        string memory _country,
+        string memory _region,
+        string memory _state,
+        bool _agreement,
+        string memory _password
     ) external {
-        require(msg.sender != address(0), "Address not valid");
         require(msg.sender != owner, "Address shouldn't be system owner");
+        require(_manPublicAddress != address(0), "Address not valid");
         require(
-            manufacturerDetails[msg.sender].isSignedUp,
+            manufacturerDetails[_manPublicAddress].isSignedUp,
             "Manufacturer is already registered"
         );
-        require(
-            bytes(_manfName).length > 0,
-            "Manufacturer name cannot be empty"
-        );
-        require(bytes(_location).length > 0, "Location name cannot be empty");
-        require(bytes(_email).length > 0, "Email address cannot be empty");
-        require(bytes(_phoneNumber).length > 0, "Phone number cannot be empty");
-        require(_password.length > 0, "Password cannot be empty");
-
-        // Generate a salt (you can use a random number or a unique value)
-        bytes32 salt = bytes32(
-            uint256(
-                keccak256(abi.encodePacked(block.timestamp, block.prevrandao))
-            )
-        );
-
-        // Hash the password with the salt
-        bytes32 passwordHash = keccak256(abi.encode(_password, salt));
+        require(bytes(_fullName).length > 0,"Manufacturer name shouldn't be empty");
+        require(bytes(_email).length > 0, "Email address shouldn't be empty");
+        require(bytes(_brand).length > 0, "Brand shouldn't be empty");
+        require(bytes(_licenseUri).length > 0, "License Uri shouldn't be empty");
+        require(bytes(_country).length > 0, "Country shouldn't be empty");
+        require(bytes(_region).length > 0, "Region shouldn't be empty");
+        require(bytes(_state).length > 0, "State shouldn't be empty");
+        require(bytes(_password).length > 0, "Password shouldn't be empty");
 
         emit ManufacturerAdded(msg.sender);
         manufacturerDetails[msg.sender] = Manufacturer(
-            msg.sender,
-            _manfName,
-            _location,
+            _manPublicAddress,
+            _fullName,
             _email,
-            _phoneNumber,
-            passwordHash,
-            true
+            _brand,
+            _licenseUri,
+            _country,
+            _region,
+            _state,
+            _agreement,
+            _password,
+            false,
+            true,
+            false
         );
+    }
+
+    function  manufacturerLogin(address _MNPublicAddress, string memory _password) public {
+        require(manufacturerDetails[_MNPublicAddress].isRegistered == true, "Your not registered yet!");
+        require(manufacturerDetails[_MNPublicAddress].isVerified == true, "Your not verified as manufacturer yet!");
+        // require(manufacturerDetails[_MNPublicAddress].isLogin == false, "Your Already login");
+        require(compareString(manufacturerDetails[_MNPublicAddress].password, _password), "Invalid address or password");
+
+        manufacturerDetails[_MNPublicAddress].isLogin = true;
     }
 
     function addRetailer(
@@ -198,14 +214,14 @@ contract QrCode {
         string memory _email,
         string memory _password
     ) external onlyManufacturer {
-        require(bytes(_publicAddress).length > 0, "Retailer publicAddress cannot be empty");
+        require(_publicAddress != address(0), "Retailer public address not valid");
         require(bytes(_name).length > 0, "Retailer name cannot be empty");
         require(bytes(_location).length > 0, "Location name cannot be empty");
         require(bytes(_email).length > 0, "Email address cannot be empty");
         require(bytes(_password).length > 0, "Phone number cannot be empty");
 
         emit RetailerAdded(_name);
-        Retailer storage retailer = Retailer(
+        Retailer memory retailer = Retailer(
             _publicAddress,
             _name,
             _location,
@@ -216,17 +232,15 @@ contract QrCode {
         retailerDetails[_publicAddress] = retailer;
     }
 
-    function removeRetailer(uint256 _retailerID) external onlyManufacturer {
+    function removeRetailer(address _retailerAddress) external onlyManufacturer {
         require(
-            manufacturerToRetailerDetails[msg.sender][_retailerID].retailerID ==
-                _retailerID,
+            manufacturerToRetailerDetails[msg.sender][_retailerAddress].publicAddress ==
+                _retailerAddress,
             "Retailer not found"
         );
-        emit RetailerRemoved(_retailerID);
-        delete manufacturerToRetailerDetails[msg.sender][_retailerID];
-        delete retailerDetails[
-            manufacturerToRetailerDetails[msg.sender][_retailerID].name
-        ];
+        emit RetailerRemoved(_retailerAddress);
+        delete manufacturerToRetailerDetails[msg.sender][_retailerAddress];
+        delete retailerDetails[manufacturerToRetailerDetails[msg.sender][_retailerAddress].publicAddress];
     }
 
     function storeQrHash(string memory _qrHash) external onlyManufacturer {

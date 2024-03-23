@@ -162,7 +162,7 @@ const QrScann = () => {
 
   return (
 
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex flex-col items-center justify-center h-[69vh]">
       <h1 className="text-2xl font-semibold mb-2 md:text-4xl">Care Your Healthy</h1>
       <h1 className="mb-16 text-lg md:text-1xl">Verify Your Wine Qr-Code Before use</h1>
       {/* {scannedResult && (
@@ -173,14 +173,14 @@ const QrScann = () => {
       <div className="relative w-full md:max-w-2xl">
         <video
           ref={videoEl}
-          className="w-full h-[50%] bg-black rounded-lg "
+          className="w-full h-screen bg-black rounded-lg "
         ></video>
         <div ref={qrBoxEl} className="flex items-center justify-center">
           <img
             src={QrFrame}
             alt="Qr Frame"
-            width={456}
-            height={456}
+            width={656}
+            height={656}
             className="h-auto absolute flex z-50 items-center justify-center"
           />
         </div>

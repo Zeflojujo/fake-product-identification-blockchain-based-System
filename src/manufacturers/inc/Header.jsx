@@ -120,7 +120,7 @@ import { FaInfoCircle } from "react-icons/fa";
 // import { IoSettingsSharp } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 
-const Header = ({ isOpen, toggleSidebar, isAuth }) => {
+const Header = ({ isOpen, toggleSidebar, isAuth, width }) => {
   const [connectedAccount] = useGlobalState("connectedAccount");
   // const [medicalCenter] = useGlobalState("medicalCenter");
   const [isDropdownOpen, setDropdownOpen] = useState(false);

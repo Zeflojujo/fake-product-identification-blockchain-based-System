@@ -1,6 +1,6 @@
 // import Identicon from 'react-identicons'
 import { setGlobalState, useGlobalState, truncate } from '../../store'
-import donate from "../../assets/system.jpg"
+import System from "../../assets/manufacturer.jpg"
 import { Link } from 'react-router-dom'
 
 const Hero = () => {
@@ -16,7 +16,7 @@ const Hero = () => {
         >
             <div className="md:w-3/6 w-full">
                 <div>
-                    <h1 className="text-white text-5xl font-bold">
+                    <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-bold">
                         Alcoshield <br /> Fake Product Identification, <br />
                         <span className="text-gradient">FPIBS</span> System
                     </h1>
@@ -27,7 +27,7 @@ const Hero = () => {
 
                 <div className="flex flex-row mt-5">
                     <Link
-                        to="/donor/login"
+                        to="/customer"
                         className="shadow-xl shadow-black text-white
             bg-[#e32970] hover:bg-[#bd255f]
             rounded-full cursor-pointer py-2 px-4"
@@ -58,7 +58,7 @@ const Hero = () => {
       mt-10 md:mt-0 rounded-md overflow-hidden bg-gray-800"
             >
                 <img
-                    src={donate}
+                    src={System}
                     alt="donate blooc"
                     className="h-60 w-full object-cover"
                 />
