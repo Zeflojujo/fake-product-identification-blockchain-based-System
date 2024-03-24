@@ -9,8 +9,11 @@ import ScannQrCode from "./customers/pages/ScannQrCode"
 import RegisterRetailers from "./manufacturers/pages/Retailers"
 import CustomerHome from "./customers/pages/Home"
 import Dashboard from "./manufacturers/pages/Dashboard"
+import AdminDashboard from "./admin/pages/AdminDashboard"
 import AddProduct from "./manufacturers/pages/AddProduct"
 import Home from "./+homedirectory/pages/home"
+import AdminLogin from "./admin/pages/auth/AdminLogin"
+import Manufacturers from "./admin/pages/Manufacturers"
 
 const App = () => {
     return (
@@ -26,6 +29,11 @@ const App = () => {
 
                 <Route path="/manufacturer/login" element={<LoginManufacturer />} />
                 <Route path="/manufacturer/register" element={<RegisterManufacturer />} />
+
+                {/* Admin */}
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                <Route path="/admin/manufacturer" element={<Manufacturers />} />
 
                 {/* customer */}
                 <Route path="/customer" element={<CustomerHome />} />

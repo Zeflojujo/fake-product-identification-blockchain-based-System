@@ -1,6 +1,7 @@
 import Web3 from "web3";
 import { setGlobalState, getGlobalState } from "./store";
 import qrcodeAbi from "./abis/QrCode.json";
+import CryptoJS from "crypto-js"
 
 const { ethereum } = window;
 window.web3 = new Web3(ethereum);
@@ -95,6 +96,21 @@ const signUpManufacturer = async ({
   }
 }
 
+const verifyManufacturer = async ({
+  manufacturerAddress
+}) => {
+  try {
+
+    const contract = getEtheriumContract();
+    const account = getGlobalState("connectedAccount");
+
+    await contract.methods.verifyManufacturer(manufacturerAddress).send({from: account, gas: 1000000});
+    
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
 const registerRetailer = async ({
   publicAddress,
   name,
@@ -115,7 +131,13 @@ const registerRetailer = async ({
 const generateQrCode = async ({
   numberOfQrCode
 }) => {
-  const qrCodeHash = "123456abcd1234";
+
+  //retrieve data array from smartcontract
+  const dataRetrieved = await retrieveManufacturerData();
+  console.log("retrieved Data: ", dataRetrieved);
+
+  const qrCodeHash = CryptoJS.SHA1(dataRetrieved.join("") + Math.random()).toString()
+
   try {
     const contract = await getEtheriumContract();
     const account = getGlobalState("connectedAccount");
@@ -153,9 +175,7 @@ const manufacturerLogin = async ({ publicAddress, password }) => {
 
     const passwordHash = window.web3.utils.sha3(password);
 
-    await contract.methods
-      .manufacturerLogin(publicAddress, passwordHash)
-      .send({ from: account, gas: 1000000 });
+    await contract.methods.manufacturerLogin(publicAddress, passwordHash).send({ from: account, gas: 1000000 });
 
     return true;
   } catch (error) {
@@ -163,41 +183,52 @@ const manufacturerLogin = async ({ publicAddress, password }) => {
   }
 };
 
-// const addDonor = async ({
-//     publicAddress,
-//     name,
-//     age,
-//     weight,
-//     gender,
-//     phoneNumber,
-//     password,
-//   }) => {
-//     try {
-//       const contract = await getEtheriumContract();
-//       const account = getGlobalState("connectedAccount");
-  
-//       await contract.methods
-//         .addDonor(publicAddress, name, age, weight, gender, phoneNumber, password)
-//         .send({ from: account, gas: 1000000 });
-  
-//       return true;
-//     } catch (error) {
-//       if (
-//         error.message.includes("Only collection point can perform this action")
-//       ) {
-//         const errorMessage = "Please, Login with administrator wallet account";
-//         setGlobalState("donorError", errorMessage);
-//       } else if (error.message.includes("Donor is already registered")) {
-//         const errorMessage = "Donor is already registered";
-//         setGlobalState("donorError", errorMessage);
-//       } else if (error.message.includes("Invalid public address")) {
-//         const errorMessage = "Invalid publicAddress or Password";
-//         setGlobalState("donorError", errorMessage);
-//       } else {
-//         setGlobalState("smartcontractError", "Donor Registration Failed");
-//       }
-//     }
-//   };
+const displayManufacturersData = async () => {
+      try {
+        // if (!ethereum) return console.log("Please install Metamask");
+    
+        const contract = await getEtheriumContract();
+        const account = getGlobalState("connectedAccount");
+    
+        const manufacturerArray = await contract.methods.getManufacturerArray().call();
+    
+        const manufacturersData = [];
+    
+        if (manufacturerArray.length === 0) {
+          console.log("NO DATA");
+        }
+    
+        for (let i = 0; i < manufacturerArray.length; i++) {
+          const manufacturerAddress = manufacturerArray[i];
+
+          const _manufacturer = await contract.methods.getManufacturer(manufacturerAddress).call();
+          console.log("let me see manufacturer details: ",_manufacturer);
+
+          manufacturersData.push(_manufacturer);
+        }
+    
+        setGlobalState("manufacturers", manufacturersData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const retrieveManufacturerData = async () => {
+      try {
+        // if (!ethereum) return console.log("Please install Metamask");
+    
+        const contract = await getEtheriumContract();
+        const manufacturerAddress = getGlobalState("connectedAccount");
+
+          const manufacturerData = await contract.methods.getManufacturer(manufacturerAddress).call();
+          console.log("let me see manufacturer details: ", manufacturerData);
+
+        setGlobalState("manufacturer", manufacturerData);
+        return manufacturerData;
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
 //   const deleteDonor = async ({ publicAddress }) => {
 //     try {
@@ -211,63 +242,6 @@ const manufacturerLogin = async ({ publicAddress, password }) => {
 //       return true;
 //     } catch (error) {
 //       console.log(error.message);
-//     }
-//   };
-
-  
-
-//   const medicalCenterLogin = async ({ publicAddress, password }) => {
-//     try {
-//       const contract = await getEtheriumContract();
-//       const account = getGlobalState("connectedAccount");
-  
-//       await contract.methods
-//         .medicalCenterLogin(publicAddress, password)
-//         .send({ from: account, gas: 1000000 });
-  
-//       return true;
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-
-
-//   const displayMedicalRecord = async () => {
-//     try {
-//       if (!ethereum) return console.log("Please install Metamask");
-  
-//       const contract = await getEtheriumContract();
-//       const account = getGlobalState("connectedAccount");
-  
-//       const medicalRecordIdArray = await contract.methods
-//         .getMedicalRecordsArr()
-//         .call();
-  
-//       const medicalRecordData = [];
-  
-//       if (medicalRecordIdArray.length === 0) {
-//         console.log("NO DATA");
-//       }
-  
-//       for (let i = 0; i < medicalRecordIdArray.length; i++) {
-//         const medicalRecordId = medicalRecordIdArray[i];
-//         // console.log(`the registration number is: ${voterRegNumber}`);
-//         const _donationTransaction = await contract.methods
-//           .getMedicalRecord(account, medicalRecordId)
-//           .call();
-//         console.log(
-//           "let me see donationTransaction details: ",
-//           _donationTransaction.medicalRecordID
-//         );
-//         if (_donationTransaction.medicalRecordID !== 0n) {
-//           medicalRecordData.push(_donationTransaction);
-//         }
-//         // console.log("Donation Transaction :", _donationTransaction);
-//       }
-  
-//       setGlobalState("medicalRecords", medicalRecordData);
-//     } catch (error) {
-//       console.log(error);
 //     }
 //   };
 
@@ -322,6 +296,8 @@ export {
     systemOwnerLogin,
     manufacturerLogin,
     signUpManufacturer,
+    verifyManufacturer,
     registerRetailer,
-    generateQrCode
+    generateQrCode,
+    displayManufacturersData
   };

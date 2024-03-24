@@ -9,12 +9,11 @@ const { setGlobalState, useGlobalState, getGlobalState } = createGlobalState({
   alert: { show: false, msg: "", color: "" },
   loading: { show: false, msg: "" },
   connectedAccount: "",
-  donationTransaction: null,
   qrCodes: [],
-  donorTransactionHistory: [],
   contract: null,
-  smartcontractError: "Transporter Registration failed...",
-  donorError: "Donor Registration failed...",
+  smartcontractError: "",
+  manufacturers: [],
+  manufacturer: []
 })
 
 const setAlert = (msg, color = 'green') => {
