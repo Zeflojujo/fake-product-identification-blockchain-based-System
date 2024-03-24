@@ -101,10 +101,14 @@ const verifyManufacturer = async ({
 }) => {
   try {
 
-    const contract = getEtheriumContract();
+    const contract = await getEtheriumContract();
     const account = getGlobalState("connectedAccount");
 
+    console.log("manufacturer address: ", manufacturerAddress)
+
     await contract.methods.verifyManufacturer(manufacturerAddress).send({from: account, gas: 1000000});
+
+    return true;
     
   } catch (error) {
     console.log(error.message)
@@ -133,16 +137,22 @@ const generateQrCode = async ({
 }) => {
 
   //retrieve data array from smartcontract
-  const dataRetrieved = await retrieveManufacturerData();
-  console.log("retrieved Data: ", dataRetrieved);
+  
 
-  const qrCodeHash = CryptoJS.SHA1(dataRetrieved.join("") + Math.random()).toString()
+
 
   try {
     const contract = await getEtheriumContract();
     const account = getGlobalState("connectedAccount");
 
+    const dataRetrieved = await retrieveManufacturerData();
+    console.log("retrieved Data: ", dataRetrieved);
+
     for(let i=0; i<numberOfQrCode; i++) {
+
+      const qrCodeHash = CryptoJS.SHA1(dataRetrieved + Math.random()).toString()
+      console.log("qrCodeHash: ", qrCodeHash)
+
       await contract.methods.storeQrHash(qrCodeHash).send({from: account, gas: 1000000})
     }
 
@@ -193,6 +203,7 @@ const displayManufacturersData = async () => {
         const manufacturerArray = await contract.methods.getManufacturerArray().call();
     
         const manufacturersData = [];
+        console.log("manufacturerArray: ", manufacturerArray)
     
         if (manufacturerArray.length === 0) {
           console.log("NO DATA");

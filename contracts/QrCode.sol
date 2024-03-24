@@ -165,7 +165,7 @@ contract QrCode {
         bool _agreement,
         string memory _password
     ) external {
-        require(msg.sender != owner, "Address shouldn't be system owner");
+       /* require(msg.sender != owner, "Address shouldn't be system owner");
         require(_manPublicAddress != address(0), "Address not valid");
         require(
             manufacturerDetails[_manPublicAddress].isRegistered,
@@ -178,7 +178,7 @@ contract QrCode {
         require(bytes(_country).length > 0, "Country shouldn't be empty");
         require(bytes(_region).length > 0, "Region shouldn't be empty");
         require(bytes(_state).length > 0, "State shouldn't be empty");
-        require(bytes(_password).length > 0, "Password shouldn't be empty");
+        require(bytes(_password).length > 0, "Password shouldn't be empty");*/
 
         emit ManufacturerAdded(msg.sender);
         manufacturerDetails[msg.sender] = Manufacturer(
@@ -196,6 +196,7 @@ contract QrCode {
             true,
             false
         );
+        manufactureAddressArray.push(_manPublicAddress);
     }
 
     function verifyManufacturer(address _manufacturerAddress) public onlySysOwner{

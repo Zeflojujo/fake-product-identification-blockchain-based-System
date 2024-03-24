@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { HashRouter as Router, Routes, Route } from "react-router-dom"
 import ViewFakeProduct from "./manufacturers/pages/ViewFakeProduct"
 import QrCodes from "./manufacturers/pages/QrCodes"
@@ -14,8 +14,17 @@ import AddProduct from "./manufacturers/pages/AddProduct"
 import Home from "./+homedirectory/pages/home"
 import AdminLogin from "./admin/pages/auth/AdminLogin"
 import Manufacturers from "./admin/pages/Manufacturers"
+import { displayManufacturersData, isWallectConnected } from "./BlockchainService"
+import Profile from "./manufacturers/pages/Profile"
 
 const App = () => {
+    useEffect(() => {
+        const isConnected = async () => {
+            await isWallectConnected();
+            await displayManufacturersData();
+        };
+        isConnected();
+    },[])
     return (
         <Router>
             <Routes>
@@ -26,6 +35,7 @@ const App = () => {
                 <Route path="/manufacturer/generate-qrcode" element={<GenerateQrCode />} />
                 <Route path="/manufacturer/retailers" element={<RegisterRetailers />} />
                 <Route path="/manufacturer/add-product" element={<AddProduct />} />
+                <Route path="/manufacturer/profile" element={<Profile />} />
 
                 <Route path="/manufacturer/login" element={<LoginManufacturer />} />
                 <Route path="/manufacturer/register" element={<RegisterManufacturer />} />

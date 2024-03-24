@@ -16,8 +16,6 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const ManufacturerLogin = () => {
   const navigate = useNavigate();
-  const [publicAddress, setPublicAddress] = useState('')
-  const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isDisabled, setIsDisabled] = useState(true)
 
@@ -45,7 +43,7 @@ const ManufacturerLogin = () => {
     setGlobalState('loading', { show: true, msg: 'System Owner is Login...' })
 
     try {
-      const LoginCredentials = { publicAddress, password }
+      const LoginCredentials = { publicAddress: user.publicAddress, password: user.password }
 
       setLoadingMsg('Intializing transaction...')
       const result = await manufacturerLogin(LoginCredentials)
@@ -54,8 +52,8 @@ const ManufacturerLogin = () => {
       if (result) {
         setAlert('Login successfully...', 'green')
         setTimeout(() => {
-          navigate('/damu-salama/dashboard');
-          // window.location.href="/damu-salama/dashboard"
+          navigate('/manufacturer/dashboard');
+          // window.location.href = "/damu-salama/dashboard"
         }, 2000);
         resetForm()
       } else {
@@ -70,8 +68,10 @@ const ManufacturerLogin = () => {
 
 
   const resetForm = () => {
-    setPublicAddress("")
-    setPassword("")
+    setUser({
+      publicAddress: "",
+      password: ""
+    })
   }
 
   return (

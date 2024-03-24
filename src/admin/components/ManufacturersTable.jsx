@@ -5,6 +5,7 @@ import { verifyManufacturer } from '../../BlockchainService'
 import { MdDelete } from 'react-icons/md';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import { TbAdjustmentsCancel, TbTopologyStar3 } from "react-icons/tb";
+import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
 
 const ManufacturersTable = () => {
     const [manufacturers] = useGlobalState("manufacturers")
@@ -52,24 +53,24 @@ const ManufacturersTable = () => {
         if (!manufacturerAddress) return
 
         setGlobalState('modal', 'scale-0')
-        setGlobalState('loading', { show: true, msg: 'Verifiying manufacturer...' })
+        setGlobalState('loading', { show: true, msg: 'Verifying manufacturer...' })
 
         try {
 
-            setLoadingMsg('Intializing transaction...')
+            setLoadingMsg('Verifying manufacturer...')
 
             const result = await verifyManufacturer({ manufacturerAddress })
 
             if (result) {
                 resetForm()
-                setAlert('Registration completed...', 'green')
+                setAlert('Verification is completed..!', 'green')
             } else {
                 throw Error
             }
 
         } catch (error) {
             console.log('Error uploading file: ', error)
-            setAlert('Donor Registration failed...', 'red')
+            setAlert('Manufacturer Verification failed...', 'red')
         }
     }
 
@@ -131,11 +132,11 @@ const ManufacturersTable = () => {
                                         <td className={`py-2 px-4 text-gray-700 text-base text-center border-b dark:text-gray-500 ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}>{manufacturer.country}</td>
                                         <td className={`py-2 px-4 text-gray-700 text-base text-center border-b dark:text-gray-500 ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}>{manufacturer.region}</td>
                                         <td className={`py-2 px-4 text-gray-700 text-base text-center border-b dark:text-gray-500 ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}>{manufacturer.state}</td>
-                                        <td className={`py-2 px-4 text-gray-700 text-base text-center border-b dark:text-gray-500 ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}>{manufacturer.agreement}</td>
-                                        <td className={`py-2 px-4 text-gray-700 text-base text-center border-b dark:text-gray-500 ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}>{manufacturer.isVerified}</td>
+                                        <td className={`py-2 px-4 text-gray-700 text-base text-center border-b dark:text-gray-500 ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}>{manufacturer.agreement.toString()}</td>
+                                        <td className={`py-2 px-4 text-gray-700 text-base text-center border-b dark:text-gray-500 ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}>{manufacturer.isVerified.toString()}</td>
 
+                                        <td className={`w-20 py-2 px-4 text-gray-700 text-base border-b ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}><button onClick={() => handleVerifyManufacturerModel(manufacturer.manPublicAddress)} className='border border-solid bg-orange-400 hover:bg-orange-500 active:bg-orange-400 px-3 py-1 border-r-2 text-white dark:bg-transparent flex items-center gap-1 dark:text-gray-500 dark:border-orange-500'><IoMdCheckmarkCircleOutline size={17} />Verify</button></td>
                                         <td className={`w-20 py-2 px-4 text-gray-700 text-base border-b ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}><button className='border border-solid bg-red-400 hover:bg-red-500 active:bg-red-400 px-3 py-1 border-r-2 text-white dark:bg-transparent dark:text-gray-500 gap-1 flex items-center dark:border-red-500'><MdDelete size={17} />Delete</button></td>
-                                        <td className={`w-20 py-2 px-4 text-gray-700 text-base border-b ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}><button onClick={() => handleVerifyManufacturerModel(manufacturer.manPublicAddress)} className='border border-solid bg-red-400 hover:bg-red-500 active:bg-red-400 px-3 py-1 border-r-2 text-white dark:bg-transparent dark:text-gray-500 dark:border-red-500'>Delete</button></td>
                                         {/* <td className={`w-20 py-2 px-4 text-gray-700 text-base border-b ${hoveredRow === index ? 'bg-gray-200 dark:bg-gray-900' : ''}`}><button onClick={() => UpdataNewsHandler(item.id)} className='border border-solid bg-cyan-400 hover:bg-cyan-600 active:bg-cyan-400 px-3 py-1 border-r-2 text-white dark:bg-transparent dark:text-gray-500 dark:border-cyan-400'>Update</button></td> */}
                                     </tr>
                                 ))
