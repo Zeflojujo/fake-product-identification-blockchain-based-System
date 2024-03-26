@@ -1,8 +1,6 @@
 import React from "react"
 // import { FaAngleLeft } from "react-icons/fa6";
-import { MdDashboard } from "react-icons/md"
-import { FaChartPie } from "react-icons/fa"
-import { FaUser } from "react-icons/fa"
+import { MdAddHomeWork, MdDashboard } from "react-icons/md"
 import { FaWineBottle } from "react-icons/fa"
 import { BsDatabaseFillAdd, BsQrCode } from "react-icons/bs"
 import { IoIosArrowForward } from "react-icons/io"
@@ -15,7 +13,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
 
     const Menus = [
         { title: "Dashboard", link: "/admin/dashboard", icon: <MdDashboard /> },
-        { title: "Manufacturers", link: "/admin/manufacturer", icon: <FaUser /> },
+        { title: "Manufacturers", link: "/admin/manufacturer", icon: <MdAddHomeWork /> },
         // { title: "View Fake Products", link: "/admin/fake-product", icon: <FaKeycdn /> },
     ]
 

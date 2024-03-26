@@ -78,10 +78,10 @@ const ManufacturersTable = () => {
         <>
 
             <div className="mb-4">
-                <h1 className="text-3xl font-bold text-gray-800 mb-2 dark:text-gray-400">List of Retailers</h1>
+                <h1 className="text-3xl font-bold text-gray-800 mb-2 dark:text-gray-400">List of Manufacturers</h1>
             </div>
 
-            <div className="p-4">
+            <div className="pr-4">
 
 
 

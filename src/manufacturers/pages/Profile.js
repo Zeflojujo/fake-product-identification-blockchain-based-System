@@ -10,7 +10,7 @@ function Profile() {
   };
 
   return (
-    <div className="flex min-h-screen dark:bg-[#212936] dark:text-gray-300">
+    <div className="overflow-hidden flex min-h-screen dark:bg-[#212936] dark:text-gray-300">
 
         {/* Manufacturers Sidebar component is included */}
       <Sidebar toggleSidebar={toggleSidebar} isOpen={isSidebarOpen}/>

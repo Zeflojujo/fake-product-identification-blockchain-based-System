@@ -14,7 +14,7 @@ import AddProduct from "./manufacturers/pages/AddProduct"
 import Home from "./+homedirectory/pages/home"
 import AdminLogin from "./admin/pages/auth/AdminLogin"
 import Manufacturers from "./admin/pages/Manufacturers"
-import { displayManufacturersData, isWallectConnected } from "./BlockchainService"
+import { displayManufacturersData, displayProducts, displayQrCodeData, isWallectConnected } from "./BlockchainService"
 import Profile from "./manufacturers/pages/Profile"
 
 const App = () => {
@@ -22,6 +22,8 @@ const App = () => {
         const isConnected = async () => {
             await isWallectConnected();
             await displayManufacturersData();
+            await displayQrCodeData();
+            await displayProducts();
         };
         isConnected();
     },[])

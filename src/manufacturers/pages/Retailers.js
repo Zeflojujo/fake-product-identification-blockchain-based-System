@@ -79,7 +79,7 @@ const Retailers = () => {
   }
 
   return (
-    <div className="flex min-h-screen dark:bg-[#212936] dark:text-gray-300">
+    <div className="overflow-hidden flex min-h-screen dark:bg-[#212936] dark:text-gray-300">
       {/* Manufacturers Sidebar component is included */}
       <div className="relative">
         <Sidebar toggleSidebar={toggleSidebar} isOpen={isSidebarOpen} />
@@ -107,13 +107,7 @@ const Retailers = () => {
               <Alert />
               <Loading />
             </div>
-
-            {/* <RetailerTable data={data} className="dark:bg-gray-900" /> */}
           </div>
-
-
-
-
 
           <div
             className={`fixed top-0 left-0 w-screen h-screen flex items-center
@@ -169,8 +163,8 @@ const Retailers = () => {
 
                 <div className="mt-4">
                   <input
-                    className="mt-1 px-3 py-1.5 md:py-2 w-full border dark:border-solid dark:border-gray-600 rounded-md dark:bg-transparent text-gray-700 bg-clip-padding"
-                    type="location"
+                    className="mt-1 px-3 py-1.5 md:py-2 w-full border dark:border-solid dark:border-gray-600 rounded-md dark:bg-transparent text-base text-gray-700 bg-clip-padding"
+                    type="text"
                     name="location"
                     placeholder="location"
                     onChange={(e) => setRetailer({...retailer, location: e.target.value})}
@@ -182,7 +176,7 @@ const Retailers = () => {
                 <div className="mt-4">
                   <input
                     className="mt-1 px-3 py-1.5 md:py-2 w-full border dark:border-solid dark:border-gray-600 rounded-md dark:bg-transparent text-gray-700 bg-clip-padding"
-                    type="number"
+                    type="text"
                     name="email"
                     placeholder="email"
                     onChange={(e) => setRetailer({...retailer, email: e.target.value})}

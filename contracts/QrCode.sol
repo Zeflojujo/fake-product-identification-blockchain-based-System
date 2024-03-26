@@ -68,6 +68,7 @@ contract QrCode {
 
     mapping(address => mapping(address => Retailer)) public manufacturerToRetailerDetails;
     mapping(address => Retailer) public retailerDetails;
+    address[] private retailerDetailsArray;
 
     //STORING
     mapping(address => mapping(uint256 => string)) private qrHashMapByManufacturer; // stored by manufacturer when generating hash + id
@@ -201,14 +202,15 @@ contract QrCode {
 
     function verifyManufacturer(address _manufacturerAddress) public onlySysOwner{
         require(manufacturerDetails[_manufacturerAddress].isRegistered, "manufacturer is not registered");
+        require(!manufacturerDetails[_manufacturerAddress].isVerified, "manufacturer is already verified");
         manufacturerDetails[_manufacturerAddress].isVerified = true;
     }
 
     function manufacturerLogin(address _MNPublicAddress, string memory _password) public {
-        require(manufacturerDetails[_MNPublicAddress].isRegistered, "Your not registered yet!");
-        require(manufacturerDetails[_MNPublicAddress].isVerified, "Your not verified as manufacturer yet!");
-        // require(!manufacturerDetails[_MNPublicAddress].isLogin, "Your Already login");
-        require(compareStrings(manufacturerDetails[_MNPublicAddress].password, _password), "Invalid address or password");
+        require(manufacturerDetails[msg.sender].isRegistered, "Your not registered yet!");
+        require(manufacturerDetails[msg.sender].isVerified, "Your not verified as manufacturer yet!");
+        // require(!manufacturerDetails[msg.sender].isLogin, "Your Already login");
+        require(compareStrings(manufacturerDetails[msg.sender].password, _password), "Invalid address or password");
 
         manufacturerDetails[_MNPublicAddress].isLogin = true;
     }
@@ -236,6 +238,7 @@ contract QrCode {
         );
         manufacturerToRetailerDetails[msg.sender][_publicAddress] = retailer;
         retailerDetails[_publicAddress] = retailer;
+        retailerDetailsArray.push(_publicAddress);
     }
 
     function removeRetailer(address _retailerAddress) external onlyManufacturer {
@@ -249,8 +252,8 @@ contract QrCode {
         delete retailerDetails[manufacturerToRetailerDetails[msg.sender][_retailerAddress].publicAddress];
     }
 
-    function storeQrHash(string memory _qrHash) external {
-        // onlyManufacturer
+    function storeQrHash(string memory _qrHash) external onlyManufacturer{
+        require(manufacturerDetails[msg.sender].isVerified, "manufacturer is not verified");
         uint256 timestamp = block.timestamp;
         emit qrHashStored(timestamp);
 
@@ -340,9 +343,9 @@ contract QrCode {
         uint256 _blockId,
         string memory _itemName,
         string memory _description
-    ) external {
-        //onlyManufacturer
+    ) external onlyManufacturer{
         require(compareStrings(qrHashMapByManufacturer[msg.sender][_blockId],_qrHash),"Hash isn't stored");
+        require(matchedItems[_qrHash] = true, "ID is already matched");
         require(storedIDs[_blockId] == true, "ID isn't stored");
         require(bytes(_itemName).length > 0, "Item name cannot be empty");
         require(bytes(_description).length > 0, "Description cannot be empty");

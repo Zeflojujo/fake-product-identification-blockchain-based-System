@@ -56,7 +56,7 @@ const ViewFakeProduct = () => {
 
   return (
     // const RetailersLists = ({ isLogin }) => {
-    <div className="flex min-h-screen dark:bg-[#212936] dark:text-gray-300">
+    <div className="overflow-hidden flex min-h-screen dark:bg-[#212936] dark:text-gray-300">
       {/* Manufacturers Sidebar component is included */}
       <div className="fized">
         <Sidebar toggleSidebar={toggleSidebar} isOpen={isSidebarOpen} />

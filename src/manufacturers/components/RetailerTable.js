@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 // import swal from 'sweetalert';
 import { useGlobalState } from '../../store'
-import swal from 'sweetalert';
-// import { deleteDonor } from '../../BlockchainService';
 import { MdDelete } from 'react-icons/md';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 
 const RetailerTable = () => {
-  const [donors] = useGlobalState("donors");
+  const [retailers] = useGlobalState("retailers");
   const [hoveredRow, setHoveredRow] = useState(null);
-  const [allDonors, setAllDonors] = useState([])
+  const [allRetailers, setAllRetailers] = useState([])
   const [end, setEnd] = useState(6)
 
 
@@ -21,14 +20,14 @@ const RetailerTable = () => {
     setHoveredRow(null);
   };
 
-  const getDonors = () => {
-    return donors.slice(0, end)
+  const getRetailers = () => {
+    return retailers.slice(0, end)
   }
 
   useEffect(() => {
-    setAllDonors(getDonors())
-    console.log(donors)
-  }, [donors, end])
+    setAllRetailers(getRetailers())
+    console.log(retailers)
+  }, [retailers, end])
 
   // const deleteRegisterHandler = async (publicAddress) => {
   //   console.log("donor deleted public address is: ", publicAddress)
@@ -62,6 +61,10 @@ const RetailerTable = () => {
 
   // }
 
+  function handleLoadMore() {
+    setEnd(end + 5)
+  }
+
   return (
     <>
 
@@ -91,7 +94,7 @@ const RetailerTable = () => {
               </tr>
             </thead>
             <tbody>
-              {allDonors.length === 0 ? (
+              {allRetailers.length === 0 ? (
                 <tr>
                   <td colSpan={9} className="flex justify-center col-span-8 items-center mx-auto py-4 px-4 text-gray-700 text-base border-b dark:text-gray-500">
                     No Record Found
@@ -99,7 +102,7 @@ const RetailerTable = () => {
                 </tr>
               ) : (
 
-                allDonors.map((donor, index) => (
+                allRetailers.map((donor, index) => (
                   <tr
                     key={index}
                     onMouseEnter={() => handleMouseEnter(index)}
@@ -118,7 +121,21 @@ const RetailerTable = () => {
                 ))
               )}
             </tbody>
+
           </table>
+          {
+            Number(retailers.length) > end ?
+              <div className="w-full">
+                <button
+                  onClick={handleLoadMore}
+                  className="flex justify-center my-4 mx-auto  items-center gap-2 bg-blue-500 mb-3 text-lg text-white dark:bg-transparent hover:text-white dark:shadow-md dark:shadow-light-white dark:border dark:border-blue-500 dark:text-gray-500 hover:bg-blue-700  font-bold py-2 px-4 rounded-lg top-4 right-4"
+                >
+                  <AiOutlineLoading3Quarters />Load More...
+                </button>
+              </div>
+              :
+              ""
+          }
         </div>
       </div>
 

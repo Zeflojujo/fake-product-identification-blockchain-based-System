@@ -25,17 +25,8 @@ const Manufacturers = () => {
         setSidebarOpen(!isSidebarOpen)
     }
 
-
-
-
-
-
-
-
-
-
     return (
-        <div className="flex min-h-screen dark:bg-[#212936] dark:text-gray-300">
+        <div className="overflow-hidden flex min-h-screen dark:bg-[#212936] dark:text-gray-300">
             {/* Manufacturers Sidebar component is included */}
             <div className="relative">
                 <Sidebar toggleSidebar={toggleSidebar} isOpen={isSidebarOpen} />
@@ -47,10 +38,10 @@ const Manufacturers = () => {
                 </div>
 
                 {/* Manufactuerers ViewFakeProduct page should be created here */}
-                <div className="flex flex-col justify-center items-center mx-auto w-full">
+                <div className="flex flex-col justify-center items-center mx-auto">
                     {/* Manufacturers Header component is included */}
 
-                    <div className="flex flex-col justify-center items-center mx-1 md:mx-4 overflow-hidden z-0 my-11 w-full">
+                    <div className="flex flex-col justify-center items-center mx-1 md:mx-4 overflow-hidden z-0 my-11">
                         {/* Manufacturers RetailerTable component is included */}
                         <div className="w-4/5">
                             <ManufacturersTable />

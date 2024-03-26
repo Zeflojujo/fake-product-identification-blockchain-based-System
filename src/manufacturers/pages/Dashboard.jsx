@@ -10,18 +10,18 @@ function Dashboard() {
   };
 
   return (
-    <div className="flex min-h-screen dark:bg-[#212936] dark:text-gray-300">
+    <div className="overflow-hidden flex h-screen dark:bg-[#212936] dark:text-gray-300">
 
-        {/* Manufacturers Sidebar component is included */}
-      <Sidebar toggleSidebar={toggleSidebar} isOpen={isSidebarOpen}/>
-      <div className="flex flex-col gap-y-4 text-3xl semibold h-screen">
+      {/* Manufacturers Sidebar component is included */}
+      <Sidebar toggleSidebar={toggleSidebar} isOpen={isSidebarOpen} />
+      <div className="flex flex-col gap-y-4 text-3xl semibold h-full">
 
         {/* Manufacturers Header component is included */}
         <div className="mb-24">
           <Header toggleSidebar={toggleSidebar} isOpen={isSidebarOpen} />
         </div>
 
-        
+
         {/* Manufactuerers ViewQrCodes page should be created here */}
         <div className="mx-8">
           <h1>Manufacturer Dashboard Page</h1>

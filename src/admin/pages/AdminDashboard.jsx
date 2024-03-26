@@ -10,11 +10,11 @@ function AdminDashboard() {
     };
 
     return (
-        <div className="flex min-h-screen dark:bg-[#212936] dark:text-gray-300">
+        <div className="overflow-hidden flex h-full dark:bg-[#212936] dark:text-gray-300">
 
             {/* Manufacturers Sidebar component is included */}
             <Sidebar toggleSidebar={toggleSidebar} isOpen={isSidebarOpen} />
-            <div className="flex flex-col gap-y-4 text-3xl semibold h-screen">
+            <div className="flex flex-col gap-y-4 text-3xl semibold h-full">
 
                 {/* Manufacturers Header component is included */}
                 <div className="mb-24">

@@ -14,6 +14,8 @@ import Manufacturer from "../../assets/manufacturer.jpg"
 import Alert from "../../+homedirectory/components/Alert"
 import Loading from "../../+homedirectory/components/Loading"
 import QrCodeTable from "../components/QrCodeTable"
+import { RiAiGenerate } from "react-icons/ri";
+import { VscGitPullRequestCreate } from "react-icons/vsc";
 
 
 const QrCodes = () => {
@@ -41,7 +43,7 @@ const QrCodes = () => {
 
     try {
 
-      setLoadingMsg('Intializing transaction...')
+      setLoadingMsg('Generating QrCodes...')
       const result = await generateQrCode({ numberOfQrCode })
 
       if (result) {
@@ -68,7 +70,7 @@ const QrCodes = () => {
   }
 
   return (
-    <div className="flex min-h-screen dark:bg-[#212936] dark:text-gray-300">
+    <div className="overflow-hidden flex min-h-screen dark:bg-[#212936] dark:text-gray-300">
       {/* Manufacturers Sidebar component is included */}
       <div className="relative">
         <Sidebar toggleSidebar={toggleSidebar} isOpen={isSidebarOpen} />
@@ -88,9 +90,9 @@ const QrCodes = () => {
             <div className="w-4/5">
               <button
                 onClick={handleGenerateQrCodeModel}
-                className="bg-blue-500 mb-3 text-lg float-end text-white dark:bg-transparent hover:text-white dark:shadow-md dark:shadow-light-white dark:border dark:border-blue-500 dark:text-gray-500 hover:bg-blue-700  font-bold py-2 px-4 rounded-lg top-4 right-4"
+                className="flex items-center gap-2 bg-blue-500 mb-3 text-lg float-end text-white dark:bg-transparent hover:text-white dark:shadow-md dark:shadow-light-white dark:border dark:border-blue-500 dark:text-gray-500 hover:bg-blue-700  font-bold py-2 px-4 rounded-lg top-4 right-4"
               >
-                Generate QrCode
+                <VscGitPullRequestCreate />Generate QrCode
               </button>
               <QrCodeTable />
               <Alert />

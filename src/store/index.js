@@ -13,7 +13,10 @@ const { setGlobalState, useGlobalState, getGlobalState } = createGlobalState({
   contract: null,
   smartcontractError: "",
   manufacturers: [],
-  manufacturer: []
+  manufacturer: [],
+  retailers: [],
+  products: [],
+  detailsForScannedItem: []
 })
 
 const setAlert = (msg, color = 'green') => {

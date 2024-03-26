@@ -127,24 +127,22 @@ const registerRetailer = async ({
     const account = getGlobalState("connectedAccount");
 
     await contract.methods.addRetailer(publicAddress, name, location, email, password).send({from: account, gas: 1000000})
+    
     return true;
   } catch (error) {
       console.log(error.message)
   }
 }
+
 const generateQrCode = async ({
   numberOfQrCode
 }) => {
-
-  //retrieve data array from smartcontract
-  
-
-
 
   try {
     const contract = await getEtheriumContract();
     const account = getGlobalState("connectedAccount");
 
+    //retrieve data array from smartcontract
     const dataRetrieved = await retrieveManufacturerData();
     console.log("retrieved Data: ", dataRetrieved);
 
@@ -162,6 +160,124 @@ const generateQrCode = async ({
     console.log(error.message)
   }
 }
+
+const deleteQrHash = async ({ publicAddress }) => {
+  try {
+    const contract = await getEtheriumContract();
+    const account = getGlobalState("connectedAccount");
+
+    await contract.methods
+      .deleteQrHash(publicAddress)
+      .send({ from: account, gas: 1000000 });
+
+    return true;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const addProduct = async ({
+  qrHash,
+  blockId,
+  productName,
+  description
+}) => {
+
+  try {
+
+    const contract = await getEtheriumContract();
+    const account = getGlobalState("connectedAccount");
+
+    await contract.methods.addItemDetails(
+      qrHash,
+      blockId,
+      productName,
+      description
+      ).send({ from: account, gas: 1000000 })
+
+      return true
+      
+    } catch (error) {
+      console.log(error.message)
+    }
+
+}
+
+//     numberOfQrCode,
+//     }) => {
+//       try {
+//         const contract = await getEtheriumContract();
+//         const account = getGlobalState("connectedAccount");
+
+//         //retrieve data array from smartcontract
+//         const dataRetrieved = await retrieveManufacturerData();
+//         console.log("retrieved Data: ", dataRetrieved);
+
+//         let nonce = await window.web3.eth.getTransactionCount(account);
+        
+//         for(let i=0; i<numberOfQrCode; i++) {
+
+//           const qrCodeHash = CryptoJS.SHA1(dataRetrieved + Math.random()).toString()
+//           console.log("qrCodeHash: ", qrCodeHash)
+
+//             // Get the nonce for the account
+      
+//           // Create a transaction object with the method data
+//           const transactionObject = contract.methods.storeQrHash(qrCodeHash);
+      
+//           const gasEstimate = await transactionObject.estimateGas();
+      
+//           // Get the gas price
+//           const gasPrice = await window.web3.eth.getGasPrice();
+      
+//           // Create a raw transaction
+//           const rawTransaction = {
+//             nonce: window.web3.utils.toHex(nonce),
+//             gasLimit: window.web3.utils.toHex(gasEstimate),
+//             gasPrice: window.web3.utils.toHex(gasPrice),
+//             to: contract.options.address,
+//             data: transactionObject.encodeABI(),
+//           };
+      
+//           // Sign the transaction
+//           const signedTransaction = await window.web3.eth.accounts.signTransaction(
+//             rawTransaction,
+//             "0x5bf5cb62ea74e5ca51cd682390d1ba3a411941de75c3357a10effbc4b32b003e" // Replace privateKey with the private key of the account
+//           );
+
+      
+//           // Send the signed transaction
+//           const receipt = await window.web3.eth.sendSignedTransaction(
+//             signedTransaction.rawTransaction
+//           );
+      
+//           console.log("QrCode generation receipt: ", receipt);
+
+//           // Increment the nonce for the next transaction
+//           nonce++;
+
+//         }
+    
+//         // Handle success
+//         return true;
+//       } catch (error) {
+//         // Handle errors
+//         if (
+//           error.message.includes("Only collection point can perform this action")
+//         ) {
+//           const errorMessage = "Please, Login with administrator wallet account";
+//           setGlobalState("donorError", errorMessage);
+//         } else if (error.message.includes("Donor is already registered")) {
+//           const errorMessage = "Donor is already registered";
+//           setGlobalState("donorError", errorMessage);
+//         } else if (error.message.includes("Invalid public address")) {
+//           const errorMessage = "Invalid publicAddress or Password";
+//           setGlobalState("donorError", errorMessage);
+//         } else {
+//           setGlobalState("smartcontractError", "Donor Registration Failed");
+//         }
+//       }
+//     };
 
 const systemOwnerLogin = async ({ publicAddress, password }) => {
   try {
@@ -203,7 +319,7 @@ const displayManufacturersData = async () => {
         const manufacturerArray = await contract.methods.getManufacturerArray().call();
     
         const manufacturersData = [];
-        console.log("manufacturerArray: ", manufacturerArray)
+        // console.log("manufacturerArray: ", manufacturerArray)
     
         if (manufacturerArray.length === 0) {
           console.log("NO DATA");
@@ -213,7 +329,7 @@ const displayManufacturersData = async () => {
           const manufacturerAddress = manufacturerArray[i];
 
           const _manufacturer = await contract.methods.getManufacturer(manufacturerAddress).call();
-          console.log("let me see manufacturer details: ",_manufacturer);
+          // console.log("let me see manufacturer details: ",_manufacturer);
 
           manufacturersData.push(_manufacturer);
         }
@@ -232,7 +348,7 @@ const displayManufacturersData = async () => {
         const manufacturerAddress = getGlobalState("connectedAccount");
 
           const manufacturerData = await contract.methods.getManufacturer(manufacturerAddress).call();
-          console.log("let me see manufacturer details: ", manufacturerData);
+          // console.log("let me see manufacturer details: ", manufacturerData);
 
         setGlobalState("manufacturer", manufacturerData);
         return manufacturerData;
@@ -241,20 +357,117 @@ const displayManufacturersData = async () => {
       }
     };
 
-//   const deleteDonor = async ({ publicAddress }) => {
-//     try {
-//       const contract = await getEtheriumContract();
-//       const account = getGlobalState("connectedAccount");
+    const displayQrCodeData = async () => {
+      try {
+        // if (!ethereum) return console.log("Please install Metamask");
+    
+        const contract = await getEtheriumContract();
+        const account = getGlobalState("connectedAccount");
+    
+        const qrCodeHashArray = await contract.methods.getManfItemIDList().call();
+    
+        const qrCodeData = [];
+        console.log("QrCodeData: ", qrCodeHashArray)
+    
+        if (qrCodeHashArray.length === 0) {
+          console.log("NO DATA");
+        }
+    
+        for (let i = 0; i < qrCodeHashArray.length; i++) {
+          const qrCodeHashID = qrCodeHashArray[i];
+
+          const _qrCodeHash = await contract.methods.getQrHashAndID(account, qrCodeHashID).call();
+          console.log("let me see qrCode details: ",_qrCodeHash);
+
+          if ( _qrCodeHash.qrHash !== "" ) {
+              qrCodeData.push(_qrCodeHash);
+            }
+        }
+    
+        setGlobalState("qrCodes", qrCodeData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const displayProducts = async () => {
+      try {
+        // if (!ethereum) return console.log("Please install Metamask");
+    
+        const contract = await getEtheriumContract();
+        const account = getGlobalState("connectedAccount");
+    
+        const productsArray = await contract.methods.getProductsArray().call();
+    
+        const productsData = [];
+        // console.log("productsArray: ", productsArray)
+    
+        if (productsArray.length === 0) {
+          console.log("NO DATA");
+        }
+    
+        for (let i = 0; i < productsArray.length; i++) {
+          const productId = productsArray[i];
+
+          const _product = await contract.methods.getProduct(productId).call();
+          // console.log("let me see product details: ",_product);
+
+          productsData.push(_product);
+        }
+    
+        setGlobalState("products", productsData);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    const displayDetailsForScannedItem = async (qrHash) => {
+      try {
+        // if (!ethereum) return console.log("Please install Metamask");
+    
+        const contract = await getEtheriumContract();
+        const medicalCenterAddress = getGlobalState("connectedAccount");
+    
+        const detailsForScannedItem = await contract.methods
+          .moreDetailsForScannedItem(qrHash)
+          .call();
+        // console.log("Medical Center :", _medicalCenter);
+    
+        setGlobalState("detailsForScannedItem", detailsForScannedItem);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const scanItem = async (qrHash) => {
+      try {
+        const contract = await getEtheriumContract();
+        const account = getGlobalState("connectedAccount");
+
+        console.log("qrHash passed is: ", qrHash)
+    
+        const result = await contract.methods.scanItem(qrHash).call();
   
-//       await contract.methods
-//         .deleteDonor(publicAddress)
-//         .send({ from: account, gas: 1000000 });
+        console.log("scaned result: ", result)
+    
+        return result;
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
   
-//       return true;
-//     } catch (error) {
-//       console.log(error.message);
-//     }
-//   };
+
+  
+
+
+
+  
+
+
+
+
+  
 
 //   const displayBloodSupplied = async () => {
 //     try {
@@ -310,5 +523,11 @@ export {
     verifyManufacturer,
     registerRetailer,
     generateQrCode,
-    displayManufacturersData
+    addProduct,
+    deleteQrHash,
+    scanItem,
+    displayManufacturersData,
+    displayQrCodeData,
+    displayProducts,
+    displayDetailsForScannedItem
   };

@@ -117,12 +117,6 @@ const AdminLogin = () => {
                     >
                         Login
                     </button>
-                    <div className="mt-4 flex justify-center items-center">
-                        <span className="text-gray-300 text-sm md:text-base lg:text-lg">Don't have an Accout?</span>
-                        <Link to="/manufacturer/register" className="text-sm md:text-base lg: text-lg text-blue-500 font-bold p-2 rounded hover:underline">
-                            Sign-Up
-                        </Link>
-                    </div>
                 </form>
             </div>
         </div>
@@ -130,4 +124,23 @@ const AdminLogin = () => {
 }
 
 export default AdminLogin
+
+
+// import React, { Suspense } from 'react';
+
+// const LazyComponent = React.lazy(() => import('./LazyComponent'));
+
+// function App() {
+//     return (
+//         <div>
+//             <h1>My React App</h1>
+//             <Suspense fallback={<div>Loading...</div>}>
+//                 <LazyComponent />
+//             </Suspense>
+//         </div>
+//     );
+// }
+
+// export default App;
+
 

@@ -14,29 +14,19 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     // const [selected, setSelected] = useState(true);
 
     const Menus = [
-        { title: "Dashboard", link: "/", icon: <MdDashboard /> },
-        {
-            title: "Generate QrCode",
-            link: "/manufacturer/generate-qrcode",
-            icon: <FaChartPie />,
-        },
-        {
-            title: "QrCodes",
-            link: "/manufacturer/qrcodes",
-            icon: <BsQrCode />,
-            // dropdown: true,
-        },
+        { title: "Dashboard", link: "/manufacturer/dashboard", icon: <MdDashboard /> },
+        { title: "QrCodes", link: "/manufacturer/qrcodes", icon: <BsQrCode />, },
         { title: "Retailers", link: "/manufacturer/retailers", icon: <FaUser /> },
-        { title: "View Fake Products", link: "/manufacturer/fake-product", icon: <FaKeycdn /> },
         { title: "Add Products", link: "/manufacturer/add-product", icon: <BsDatabaseFillAdd /> },
+        { title: "View Fake Products", link: "/manufacturer/fake-product", icon: <FaKeycdn /> },
     ]
 
     return (
-        <div className="flex relative m-h-screen max-h-full">
+        <div className="flex relative h-full max-h-full">
             <div
                 className={`self-start sticky32 top-0 inset-y-0 left-0 ${
                     isOpen ? "w-72" : "w-20"
-                } text-lg font-semibold h-screen duration-300 pt-8 bg-blue-600 dark:bg-[#212936] dark:shadow-md dark:shadow-gray-600`}
+                } text-lg font-semibold h-full duration-300 pt-8 bg-blue-600 dark:bg-[#212936] dark:shadow-md dark:shadow-gray-600`}
             >
                 <div className="flex items-center border-b-2 border-b-gray-300 pb-3 border-opacity-35">
                     <span>
