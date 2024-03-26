@@ -397,7 +397,8 @@ const displayManufacturersData = async () => {
         const contract = await getEtheriumContract();
         const account = getGlobalState("connectedAccount");
     
-        const productsArray = await contract.methods.getProductsArray().call();
+        // const productsArray = await contract.methods.getProductsArray().call();
+        const productsArray =[1,2,3,4,5,67,7]
     
         const productsData = [];
         // console.log("productsArray: ", productsArray)
@@ -409,7 +410,8 @@ const displayManufacturersData = async () => {
         for (let i = 0; i < productsArray.length; i++) {
           const productId = productsArray[i];
 
-          const _product = await contract.methods.getProduct(productId).call();
+          // const _product = await contract.methods.getProduct(productId).call();
+          const _product = [1,2,3,4,5,6,7]
           // console.log("let me see product details: ",_product);
 
           productsData.push(_product);
